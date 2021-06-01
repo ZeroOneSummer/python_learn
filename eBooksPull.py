@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 import requests, sys
 
 """
@@ -53,8 +54,8 @@ if __name__ == "__main__":
     obj = down_novel()
     obj.get_text_url()
     print('《一年永恒》开始下载>>>')
-    for i in range(obj.nums):
+    for i in tqdm(range(obj.nums)):
         obj.writer(obj.chapters[i], '一念永恒.txt', obj.get_contents(obj.urls[i]))
-        sys.stdout.write("  已下载:%.3f%%" % float(i / obj.nums) + '\r')   # %.3f小数点三位，%%百分号
-        sys.stdout.flush()
+        # sys.stdout.write("  已下载:%.3f%%" % float(i / obj.nums) + '\r')   # %.3f小数点三位，%%百分号
+        # sys.stdout.flush()
     print('下载完成')
