@@ -1,3 +1,4 @@
+import os
 from contextlib import closing
 from tqdm import tqdm
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -9,7 +10,7 @@ class down_picture(object):
         self.target = 'https://unsplash.com/napi/photos?page=xxx'    # 页码
         self.photo_id = []
         self.down_url = []
-        self.save_path = 'C:\\Users\\v_pijiang\\Desktop\\photos'
+        self.save_path = 'C:\\Users\\v_pijiang\\Desktop\\photos\\'
         self.page = 10  # 下载页数
 
     # 从json获取下载地址
@@ -36,9 +37,20 @@ class down_picture(object):
                             f.write(chunk)
                             f.flush()
 
+    # 创建目录
+    def create_dir(self):
+        _path = self.save_path
+        if not os.path.exists(_path):  # 判断文件夹是否已经存在
+            os.mkdir(_path)
+            print(_path + ' 目录创建成功')
+        else:
+            print(_path + ' 目录已存在')
+
+
 if __name__ == '__main__':
     obj = down_picture()
     print('获取图片连接中:')
+    obj.create_dir()
     obj.get_down_url()
     print('图片下载中>>>')
     obj.download()
