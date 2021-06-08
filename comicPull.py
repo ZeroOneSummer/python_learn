@@ -1,12 +1,11 @@
 import os
 import re
 import time
-from contextlib import closing
-
 import requests
+import urllib3
+from contextlib import closing
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-
 
 class down_comic(object):
 
@@ -23,7 +22,8 @@ class down_comic(object):
 
     # 获取动漫章节链接和章节名
     def get_chapter(self):
-        r = requests.get(url=self.target_url)
+        urllib3.disable_warnings()  # 抑制证书警告
+        r = requests.get(url=self.target_url, verify=False)
         bs = BeautifulSoup(r.text, 'lxml')
         list_con_li = bs.find('ul', class_="list_con_li")
         cartoon_list = list_con_li.find_all('a')
@@ -41,7 +41,7 @@ class down_comic(object):
                 name = name.replace('.', '')
             chapter_save_dir = os.path.join(self.save_path, name)
             down_comic().create_dir(chapter_save_dir)  # 创建目录
-            r = requests.get(url=url)
+            r = requests.get(url=url, verify=False)
             html = BeautifulSoup(r.text, 'lxml')
             script_info = html.script
             pics = re.findall('\d{13,14}', str(script_info))
@@ -58,7 +58,7 @@ class down_comic(object):
                     url = self.base_down_url + chapterpic_qian + '/' + chapterpic_hou + '/' + pic + '.jpg'
                 pic_name = '%03d.jpg' % (idx + 1)
                 pic_save_path = os.path.join(chapter_save_dir, pic_name)
-                with closing(requests.get(url, headers=download_header, stream=True)) as response:
+                with closing(requests.get(url, headers=download_header, stream=True, verify=False)) as response:
                     chunk_size = 1024
                     # content_size = int(response.headers['content-length'])
                     # print("文件大小：%s M" % (content_size/chunk_size))
@@ -68,7 +68,7 @@ class down_comic(object):
                                 file.write(data)
                     else:
                         print('链接异常')
-            time.sleep(10)
+            time.sleep(5)
 
 
 if __name__ == '__main__':
