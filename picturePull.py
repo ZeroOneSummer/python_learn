@@ -3,7 +3,10 @@ from contextlib import closing
 from tqdm import tqdm
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import requests, json, time
-
+"""
+    下载图片
+    2021-06-02 by Aurora
+"""
 class down_picture(object):
 
     def __init__(self):

@@ -6,7 +6,10 @@ import urllib3
 from contextlib import closing
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-
+"""
+    下载漫画
+    2021-06-07 by Aurora
+"""
 class down_comic(object):
 
     def __init__(self):
